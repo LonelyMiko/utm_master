@@ -7,7 +7,7 @@ import plotly.tools as tls
 import plotly.offline as py
 import numpy
 from sklearn.manifold import TSNE
-from scripts.plot import create_plot
+from py.scripts.plot import plot2D
 
 colors = ["navy", "turquoise", "darkorange"]
 iris = datasets.load_iris()
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     # Chapter D
     # Plot the data points into 2D dimension
     title = "I don't know what I'm doing, but it's work"
-    create_plot(title, colors, target_names, iris.data, y).show()
+    plot2D(title, colors, target_names, iris.data, y).show()
 
 
     # Compute the correlations by using the corrcoef function
@@ -76,7 +76,8 @@ if __name__ == '__main__':
 
     # Chapter E
     # 1. Use the correlations information’s found in D.3 and reduce the dataset to 3 variables then to 2 variables.
-    X = numpy.mean(corrcoef ** 2)
+    X = corrcoef ** 2
+    X_mean = numpy.mean(X)
     y = iris.target
     target_names = iris.target_names
 
@@ -98,11 +99,13 @@ if __name__ == '__main__':
         % str(lda.explained_variance_ratio_)
     )
 
+    print("Corrcoef mean: " + str(X_mean))
+
     title = "PCA of IRIS dataset"
-    create_plot(title, colors, target_names, X_r, y).show()
+    plot2D(title, colors, target_names, X_r, y).show()
 
     title = "LDA of IRIS dataset"
-    create_plot(title, colors, target_names, X_r2, y).show()
+    plot2D(title, colors, target_names, X_r2, y).show()
 
     # Use another dimensional reduction technique
     tsne = TSNE(random_state=0)
@@ -110,4 +113,4 @@ if __name__ == '__main__':
     X_tsne = tsne.fit_transform(X_normalized)
 
     title = "X_tsne of IRIS dataset"
-    create_plot(title, colors, target_names, X_tsne, y).show()
+    plot2D(title, colors, target_names, X_tsne, y).show()

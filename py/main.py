@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
     # Chapter E
     # 1. Use the correlations information’s found in D.3 and reduce the dataset to 3 variables then to 2 variables.
-    X = corrcoef
+    X = numpy.mean(corrcoef ** 2)
     y = iris.target
     target_names = iris.target_names
 

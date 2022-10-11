@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import plotly.express as px
-
+import numpy
+from sklearn.preprocessing import MinMaxScaler
+from matplotlib import offsetbox
 
 def plot2D(title, colors, target_names, data, y):
     """Create a 2d plot with matplotlib.pyplot
@@ -106,3 +108,35 @@ def plot2D_PX(data, y, plot_name):
     fig.update_traces(marker=dict(size=5,
                                   line=dict(color='black', width=0.3)))
     return fig
+
+
+def plot_embedding(X, title, digits, y):
+    _, ax = plt.subplots()
+    X = MinMaxScaler().fit_transform(X)
+
+    for digit in digits.target_names:
+        ax.scatter(
+            *X[y == digit].T,
+            marker=f"${digit}$",
+            s=60,
+            color=plt.cm.Dark2(digit),
+            alpha=0.425,
+            zorder=2,
+        )
+    shown_images = numpy.array([[1.0, 1.0]])  # just something big
+    for i in range(X.shape[0]):
+        # plot every digit on the embedding
+        # show an annotation box for a group of digits
+        dist = numpy.sum((X[i] - shown_images) ** 2, 1)
+        if numpy.min(dist) < 4e-3:
+            # don't show points that are too close
+            continue
+        shown_images = numpy.concatenate([shown_images, [X[i]]], axis=0)
+        imagebox = offsetbox.AnnotationBbox(
+            offsetbox.OffsetImage(digits.images[i], cmap=plt.cm.gray_r), X[i]
+        )
+        imagebox.set(zorder=1)
+        ax.add_artist(imagebox)
+
+    ax.set_title(title)
+    ax.axis("off")

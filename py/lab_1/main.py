@@ -53,11 +53,10 @@ if __name__ == '__main__':
     title = "I don't know what I'm doing, but it's work"
     plot2D(title, colors, target_names, iris.data, y).show()
 
-
     # Compute the correlations by using the corrcoef function
     corrcoef = numpy.corrcoef(iris.data)
 
-    #Subplots in matplotlib
+    # Subplots in matplotlib
     fig = plt.figure()
     ax1 = fig.add_subplot(221)
     ax1.plot([1, 2, 3, 4, 5], [10, 5, 10, 5, 10], 'r-')
